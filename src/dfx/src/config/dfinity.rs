@@ -73,6 +73,7 @@ impl Default for MetadataVisibility {
 
 /// # Canister Metadata Configuration
 /// Configures a custom metadata section for the canister wasm.
+/// dfx uses the first definition of a given name matching the current network, ignoring any of the same name that follow.
 #[derive(Clone, Debug, Default, Serialize, Deserialize, JsonSchema)]
 pub struct CanisterMetadataSection {
     /// # Name
@@ -85,12 +86,16 @@ pub struct CanisterMetadataSection {
 
     /// # Networks
     /// Networks this section applies to.
-    /// If this field is absent (probably the most common case), it applies to all networks.
+    /// If this field is absent, then it applies to all networks.
     /// An empty array means this element will not apply to any network.
     pub networks: Option<BTreeSet<String>>,
 
     /// # Path
-    /// Path to file containing section contents
+    /// Path to file containing section contents.
+    /// For sections with name=`candid:service`, this field is optional, and if not specified, dfx will use
+    /// the canister's candid definition.
+    /// If specified for a Motoko canister, the service defined in the specified path must be a valid subtype of the canister's
+    /// actual candid service definition.
     pub path: Option<PathBuf>,
 }
 
