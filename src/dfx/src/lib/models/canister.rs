@@ -150,9 +150,9 @@ impl Canister {
 
             // if the metadata already exists in the wasm with a different visibility,
             // then we have to remove it
-            remove_metadata(&mut m, name)?;
+            m = remove_metadata(&m, name)?;
 
-            add_metadata(&mut m, visibility, name, data)?;
+            m = add_metadata(&m, visibility, name, data)?;
         }
 
         std::fs::write(&wasm_path, &m)
